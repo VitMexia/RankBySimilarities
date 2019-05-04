@@ -1,6 +1,8 @@
 package Series;
 
 
+import javafx.scene.paint.Stop;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,12 +12,15 @@ import java.util.*;
 public class MyFile {
 
     private Map<String, Integer> termsAndOcurrences;
+    public final String fileName;
 
     private double fileDimension;
 
     public MyFile(File file, StopWords stopWords)throws FileNotFoundException {
 
         Scanner sc = new Scanner(new FileReader(file));
+
+        fileName = file.getName();
 
         termsAndOcurrences = new HashMap<>();
 
@@ -24,10 +29,10 @@ public class MyFile {
 
             temp.replaceAll("[.,:?!;(){}]","");
 
-            if(!stopWords.isStopWord(temp))
+            if(stopWords == null || !stopWords.isStopWord(temp))
                 addWord(temp);
         }
-        
+
         setFileDimension();
     }
 
@@ -58,5 +63,12 @@ public class MyFile {
 
     public Map<String, Integer> getTermsAndOcurrences(){
         return termsAndOcurrences;
+    }
+
+    public int getWordOccurrences(String word){
+
+        Integer i = termsAndOcurrences.get(word);
+        return i == null ? 0 : i;
+
     }
 }
